@@ -5,103 +5,15 @@ export default function App() {
 
   const [papan, setBoard] = useState([])
   const [triggerBtn, setTriggerBtn] = useState(true)
-  const [answer, setAnswer] = useState([])
-
-  let answerBoard = {
-    board:[
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      []
-    ]
-  }
-
-  function submitAnswer(){
-    let board1 = document.querySelectorAll(".answer1")
-    let answerBoard1 = []
-    // console.log(board1)
-    board1.forEach(i => {
-      answerBoard1.push(i.value)
-    })
-
-    let board2 = document.querySelectorAll(".answer2")
-    let answerBoard2 = []
-    // console.log(board1)
-    board2.forEach(i => {
-      answerBoard2.push(i.value)
-    })
-
-    let board3 = document.querySelectorAll(".answer3")
-    let answerBoard3 = []
-    // console.log(board1)
-    board3.forEach(i => {
-      answerBoard3.push(i.value)
-    })
-
-    let board4 = document.querySelectorAll(".answer4")
-    let answerBoard4 = []
-    // console.log(board1)
-    board4.forEach(i => {
-      answerBoard4.push(i.value)
-    })
-
-    let board5 = document.querySelectorAll(".answer5")
-    let answerBoard5 = []
-    // console.log(board1)
-    board5.forEach(i => {
-      answerBoard5.push(i.value)
-    })
-
-    let board6 = document.querySelectorAll(".answer6")
-    let answerBoard6 = []
-    // console.log(board1)
-    board6.forEach(i => {
-      answerBoard6.push(i.value)
-    })
-
-    let board7 = document.querySelectorAll(".answer7")
-    let answerBoard7 = []
-    // console.log(board1)
-    board7.forEach(i => {
-      answerBoard7.push(i.value)
-    })
-
-    let board8 = document.querySelectorAll(".answer8")
-    let answerBoard8 = []
-    // console.log(board1)
-    board8.forEach(i => {
-      answerBoard8.push(i.value)
-    })
-
-    let board9 = document.querySelectorAll(".answer9")
-    let answerBoard9 = []
-    // console.log(board1)
-    board9.forEach(i => {
-      answerBoard9.push(i.value)
-    })
 
 
-    console.log(board1,board2,board3,board4,board5,board6)
+  
 
-    console.log(answerBoard1, 'ini1')
-    console.log(answerBoard2 , 'ini 2')
-    console.log(answerBoard3, 'ini3')
-    console.log(answerBoard4, 'ini4')
-    console.log(answerBoard5, 'ini 5')
-    console.log(answerBoard6, 'ini 6')
-    console.log(answerBoard7,'ini 7')
-    console.log(answerBoard8, 'ini 8')
-    console.log(answerBoard9,'ini 9')
-  }
-
-  function getText(text){
-    let input = text
-    console.log(text)
-    return input
+  function getText(text,x,y){
+    console.log(text,x,y)
+    let answer = papan;
+    answer[x][y] = Number(text)
+    setBoard(answer)
   }
 
   async function getBoard() {
@@ -109,9 +21,41 @@ export default function App() {
     let data = await response.json();
     // console.log(data,'ini boardddd')
     setTriggerBtn(false)
-    return setBoard(data)
+    return setBoard(data.board)
   }
 
+  async function submitAnswer(){
+    console.log(papan)
+    let response = await fetch('https://sugoku.herokuapp.com/validate', {
+      method:"POST",
+      data:{
+        "board":papan
+      },
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+    })
+    let data = await response.json()
+    // let solution = await response.json()
+    console.log(data,'ini data')
+    if(data.status==='solved'){
+      alert('Congrats you solved the problem')
+    }else{
+      alert('you submitted the wrong answer')
+    }
+    // console.log(solution,'ini solution')
+    }
+
+    async function getAnswer() {  
+      let response = await fetch('https://sugoku.herokuapp.com/solve', {
+      method:"POST",
+      data:{
+        "board":papan
+      },
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+    })
+    let data = await response.json()
+    setBoard(data.solution)
+    console.log(data.solution,'ini answer')
+    }
 
   return (
     <KeyboardAvoidingView style={styles.container}>
@@ -121,30 +65,27 @@ export default function App() {
         <Button title="Play!" onPress={getBoard}></Button>
       }
       <View >
-        { papan.board && 
+        {papan && 
           <View>
             {
-              papan.board.map((b,i) => {
+              papan.map((b,x) => {
                 console.log(b,'ini array')
                 let id = 0
                 return (
-                  <View key={i} style={{display:"flex", flexDirection:"row"}}>
+                  <View key={x} style={{display:"flex", flexDirection:"row"}}>
                     {
-                      b.map((value,idx) => {
+                      b.map((value,y) => {
                         // console.log(idx,'ini idx')
                         id+=1
                         let answer = `answer${id}`
-                        // console.log(answer,'ini answer')
-                          // return (
-                          //   <TextInput className={answer} onChangeText={text => getText(text)} maxLength="1" key={idx} style={styles.number} { ...value != 0 ? value= {value} : ''}></TextInput>
-                          // )
+
                           if(value > 0) {
                             return(
-                              <TextInput className={answer} onChangeText={text => getText(text)} maxLength={1} key={idx} style={styles.number} value={`${value}`}></TextInput>
+                              <TextInput className={answer} onChangeText={text => getText(text,x,y)} maxLength={1} key={y} style={styles.number} value={`${value}`}></TextInput>
                             )
                           }else{
                             return(
-                              <TextInput className={answer} onChangeText={text => getText(text)} maxLength={1} key={idx} style={styles.number}></TextInput>
+                              <TextInput className={answer} onChangeText={text => getText(text,x,y)} maxLength={1} key={y} style={styles.number}></TextInput>
                             )
                           }
                         })
@@ -156,7 +97,10 @@ export default function App() {
               })
 
             }
-          <Button onPress={submitAnswer} title="Done"></Button>
+          <View style={{display:"flex", flexDirection:"row",padding:5}}>
+          <Button  onPress={submitAnswer} title="Done"></Button>
+          <Button  onPress={getAnswer} title="Get Answer"></Button>
+          </View>
           </View>
         }
 
