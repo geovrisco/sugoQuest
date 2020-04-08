@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import { StyleSheet, Text, View, Button, TextInput,KeyboardAvoidingView,Modal } from 'react-native';
 import ModalManual from '../components/modal'
+import LottieView from "lottie-react-native";
+
 
 
 export default function Game(props) {
@@ -11,6 +13,7 @@ export default function Game(props) {
   const [message,setMessage] = useState('')
   const [btnNext,setBtnNext] = useState(false)
   const [autoSolveMsg,setAutoSolveMsg]=useState('')
+  const [lottieLoading,setLottieLoading]=useState(false)
 
   function toggleModal(){
     setModalVisible(!modalVisible)
@@ -30,13 +33,16 @@ export default function Game(props) {
   }
 
   async function getBoard() {
+    setLottieLoading(true)
     let response = await fetch(`https://sugoku.herokuapp.com/board?difficulty=${props.route.params.difficulty}`)
     let data = await response.json();
     // console.log(data,'ini boardddd')
     setTriggerBtn(false)
+    setLottieLoading(false)
     return setBoard(data.board)
   }
     function submitAnswer(){
+      setLottieLoading(true)
       let data ={
         board:board
       }
@@ -48,6 +54,7 @@ export default function Game(props) {
       .then(response => response.json())
       .then(response => {
         if(response.status==='solved'){
+          setLottieLoading(false)
           setModalVisible(true)
           setBtnNext(true)
           setMessage('You Nailed It')
@@ -118,10 +125,24 @@ export default function Game(props) {
       <Text style={{color:'blue'}}> Welcome {props.route.params.playerName} </Text>
       {
         triggerBtn && 
-        <Button title="Play!" onPress={getBoard}></Button>
+        <Button title="Start!" onPress={getBoard}></Button>
       }
       <View >
-        {board && 
+        {
+          board.length <1 && lottieLoading &&
+          <LottieView
+          autoPlay
+          style={{
+            width: 400,
+            height: 400,
+            backgroundColor: 'white',
+          }}
+          source={require('../assets/loading2.json')}
+          // OR find more Lottie files @ https://lottiefiles.com/featured
+          // Just click the one you like, place that file in the 'assets' folder to the left, and replace the above 'require' statement
+        />
+        }
+        {board.length>=1 && 
           <View>
             {
               board.map((b,x) => {
