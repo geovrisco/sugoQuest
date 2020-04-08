@@ -139,7 +139,7 @@ export default function Game(props) {
                             return(
                               <TextInput className={answer} onChangeText={text => getText(text,x,y)} maxLength={1} key={y} 
                               style={[styles.number,
-                                ((x===2 || x===5) && (y===2 ||y===5)) ? {borderRightWidth:2,borderBottomWidth:2} : (x===2||x===5) ? {borderBottomWidth:2} : (y===2 || y===5) ? {borderRightWidth:2} :''
+                                 (x===2 || x===5) ? {borderBottomWidth:2} : (y===2 || y===5) ? {borderRightWidth:2} : '' 
                               ]} 
                               
                               value={`${value}`}></TextInput>
@@ -148,7 +148,7 @@ export default function Game(props) {
                             return(
                               <TextInput className={answer} keyboardType={'numeric'} onChangeText={text => getText(text,x,y)} maxLength={1} key={y} 
                               style={[styles.number2,
-                                ((x===2 || x===5) && (y===2 ||y===5)) ? {borderRightWidth:2,borderBottomWidth:2} : (x===2||x===5) ? {borderBottomWidth:2} : (y===2 || y===5) ? {borderRightWidth:2} :''
+                                (x===2 || x===5) ? {borderBottomWidth:2} : (y===2 || y===5) ? {borderRightWidth:2} : '' 
                              ]} 
                               
                               ></TextInput>

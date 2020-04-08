@@ -11,8 +11,10 @@ export default function ResultPage(props){
        <View style={{alignItems:"center"}}>
         <Text>Too Bad {props.route.params.playerName},</Text>
         <Text> {props.route.params.warning}</Text>
-        <Text> but still you beat {props.route.params.difficulty} difficulty, effortlessly</Text>
-        <Button onPress={() => props.navigation.navigate('Home')} title="I'll try again later :("></Button>
+        <Text> you beat {props.route.params.difficulty} difficulty, effortlessly</Text>
+        <View style={{marginTop:20}}>
+              <Button onPress={() => props.navigation.navigate('Home')} title="ill try again later"></Button>
+          </View>
       </View>
      }
      {
@@ -20,7 +22,9 @@ export default function ResultPage(props){
        <View style={{alignItems:"center"}}>
          <Text>Congratulations {props.route.params.playerName}</Text>
           <Text>You Beat the {props.route.params.difficulty} difficulty, with your own Power!</Text>
-          <Button onPress={() => props.navigation.navigate('Home')} title="Yay"></Button>
+          <View style={{marginTop:200}}>
+              <Button onPress={() => props.navigation.navigate('Home')} title="Yay"></Button>
+          </View>
        </View>
      }
     </View>
