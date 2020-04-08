@@ -16,7 +16,7 @@ export default function Home(props) {
   return(
     <KeyboardAvoidingView style={styles.container}>
       <Image 
-        style={{width:200,height:200}}
+        
         source={gambar}/>
         <Text >SudoQuest!</Text>
         <TextInput 
