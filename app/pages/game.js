@@ -128,20 +128,20 @@ export default function Game(props) {
         <Button title="Start!" onPress={getBoard}></Button>
       }
       <View >
-        {
-          board.length <1 && lottieLoading &&
-          <LottieView
-          autoPlay
-          style={{
-            width: 400,
-            height: 400,
-            backgroundColor: 'white',
-          }}
-          source={require('../assets/loading2.json')}
-          // OR find more Lottie files @ https://lottiefiles.com/featured
-          // Just click the one you like, place that file in the 'assets' folder to the left, and replace the above 'require' statement
-        />
-        }
+//         {
+//           board.length <1 && lottieLoading &&
+//           <LottieView
+//           autoPlay
+//           style={{
+//             width: 400,
+//             height: 400,
+//             backgroundColor: 'white',
+//           }}
+//           source={require('../assets/loading2.json')}
+//           // OR find more Lottie files @ https://lottiefiles.com/featured
+//           // Just click the one you like, place that file in the 'assets' folder to the left, and replace the above 'require' statement
+//         />
+//         }
         {board.length>=1 && 
           <View>
             {
